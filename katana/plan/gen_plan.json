@@ -1,0 +1,96 @@
+{
+ "currency": "credits",
+ "lock": {
+  "aspect": "9:16",
+  "fps": 30,
+  "frames": 600
+ },
+ "lines": [
+  {
+   "id": "loc_onggi",
+   "stage": "location",
+   "purpose": "Soul Cinema location: onggi pottery workshop (shots A-portal hands, D father & son)",
+   "model": "soul_cinematic",
+   "tool": "generate_image",
+   "quality": "2k",
+   "aspect_ratio": "9:16",
+   "count": 1,
+   "takes": 1,
+   "prompt_file": "plan/prompts/loc_onggi.txt",
+   "medias": [],
+   "serves_cuts": [
+    "A2",
+    "A4",
+    "D2"
+   ]
+  },
+  {
+   "id": "loc_kitchen",
+   "stage": "location",
+   "purpose": "Soul Cinema location: family restaurant kitchen with gamasot cauldrons (shots A-portal steam, E-promo TV screen)",
+   "model": "soul_cinematic",
+   "tool": "generate_image",
+   "quality": "2k",
+   "aspect_ratio": "9:16",
+   "count": 1,
+   "takes": 1,
+   "prompt_file": "plan/prompts/loc_kitchen.txt",
+   "medias": [],
+   "serves_cuts": [
+    "A3",
+    "E2"
+   ]
+  },
+  {
+   "id": "loc_hanok_aerial",
+   "stage": "location",
+   "purpose": "Soul Cinema still: Jeonju hanok rooftops aerial, used as a code-animated backdrop under the 3D map (C1-C2); no video generation",
+   "model": "soul_cinematic",
+   "tool": "generate_image",
+   "quality": "2k",
+   "aspect_ratio": "9:16",
+   "count": 1,
+   "takes": 1,
+   "prompt_file": "plan/prompts/loc_hanok_aerial.txt",
+   "medias": [],
+   "serves_cuts": [
+    "C1",
+    "C2"
+   ]
+  },
+  {
+   "id": "plate_people",
+   "stage": "canary",
+   "purpose": "Seedance 2.5 3-shot plate: potter's hands (2 s), cauldron steam (3 s), father & son at the wheel (3 s)",
+   "model": "seedance_2_5",
+   "tool": "generate_video",
+   "mode": "omni_reference",
+   "resolution": "1080p",
+   "duration": 8,
+   "aspect_ratio": "9:16",
+   "count": 1,
+   "takes": 1,
+   "generate_audio": false,
+   "bitrate_mode": "high",
+   "prompt_file": "plan/prompts/plate_people.txt",
+   "medias": [
+    {
+     "role": "image",
+     "value": "<result of loc_onggi>"
+    },
+    {
+     "role": "image",
+     "value": "<result of loc_kitchen>"
+    }
+   ],
+   "serves_cuts": [
+    "A2",
+    "A3",
+    "A4",
+    "D2",
+    "E2"
+   ],
+   "screen_seconds": 3.9
+  }
+ ]
+}

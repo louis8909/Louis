@@ -1,0 +1,21 @@
+{
+ "mode": "creative_edit",
+ "mode_reason": "New 20 s vertical motion-graphics promo authored from supplied information screenshots and the supplied BI logo; the user's 'example' is a text brief (motion-designer showreel energy), not a reference video.",
+ "explicit_locks": [
+  {"attribute": "duration", "scope": "whole", "value": "20 s", "instruction": "20s짜리 영상"},
+  {"attribute": "aspect", "scope": "whole", "value": "9:16 vertical 1080x1920", "instruction": "세로형으로 9:16 비율로"},
+  {"attribute": "tempo", "scope": "music + cutting", "value": ">=150 BPM, sleek, beat-heavy", "instruction": "효과음 및 노래는 세련되고 비트감있게, 150bpm이상으로 빠른 템포"},
+  {"attribute": "motion", "scope": "whole", "value": "flashy transitions and flashy motion; showreel-grade motion design", "instruction": "화려한 트랜지션과 화려한 모션이 포인트 / showreel ... go all out"},
+  {"attribute": "typography", "scope": "all text", "value": "strong, designed type", "instruction": "글자 디자인 확실하게 잘해줘"},
+  {"attribute": "3d", "scope": "whole", "value": "maximum use of 3D", "instruction": "3D 최대로 활용해주고"},
+  {"attribute": "style exclusion", "scope": "whole", "value": "no Chinese feel: no hanja, no gold/red lacquer luxury palette, no lanterns/seals/dragons", "instruction": "중국느낌 이런거없게"},
+  {"attribute": "content", "scope": "text", "value": "copy drawn from the supplied jbsos.or.kr screenshots", "instruction": "보내준 이미지는 천년명가 정보야"},
+  {"attribute": "logo", "scope": "ending", "value": "supplied BI logo, vectorized from the screenshot", "instruction": "맨마지막은 로고이니 활용해줘"},
+  {"attribute": "tool", "scope": "production", "value": "Higgsfield / Katana", "instruction": "Use Higgsfield/katana"},
+  {"attribute": "standing prefs (from the user's earlier sessions on this project)", "scope": "whole", "value": "no particles, no odd SFX, no radial light rays, no needle/brush props, no ink/brush styling, no 4-pebble focus/rotation, no logo-roof ㅈ emphasis, no yearly-changing figures or support amounts, numerals attached to 년, refined tone, BI colours, Jeonbuk map"}
+ ],
+ "creative_freedoms": ["concept and copy hierarchy from the supplied text", "shot design and 3D treatments", "fonts", "music and SFX selection", "transitions", "AI-generated supporting scenes"],
+ "references": [],
+ "no_reference_reason": "No reference video supplied; the user's example is a text prompt. Supplied media are information screenshots and the logo (source material).",
+ "created": "2026-10-13T05:40:00Z"
+}
