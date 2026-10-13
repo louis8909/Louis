@@ -76,11 +76,11 @@
    "medias": [
     {
      "role": "image",
-     "value": "<result of loc_onggi>"
+     "value": "0a3a882d-d36d-4859-b5e4-8e255f14d226"
     },
     {
      "role": "image",
-     "value": "<result of loc_kitchen>"
+     "value": "290ffbde-144e-40d6-aab6-6225a541331a"
     }
    ],
    "serves_cuts": [
@@ -90,7 +90,11 @@
     "D2",
     "E2"
    ],
-   "screen_seconds": 3.9
+   "screen_seconds": 3.9,
+   "inputs_provenance": {
+    "0a3a882d-d36d-4859-b5e4-8e255f14d226": "loc_onggi (Soul Cinema, completed)",
+    "290ffbde-144e-40d6-aab6-6225a541331a": "loc_kitchen (Soul Cinema, completed)"
+   }
   }
  ]
 }
