@@ -1,0 +1,19 @@
+{
+ "canvas": {"w": 1080, "h": 1920, "fps": 30, "frames": 600, "bg": "#F3EEE4"},
+ "fonts": [
+  {"family": "Pretendard", "weight": 900, "url": "comp/fonts/Pretendard-Black.otf"},
+  {"family": "Pretendard", "weight": 800, "url": "comp/fonts/Pretendard-ExtraBold.otf"},
+  {"family": "Pretendard", "weight": 700, "url": "comp/fonts/Pretendard-Bold.otf"},
+  {"family": "Pretendard", "weight": 600, "url": "comp/fonts/Pretendard-SemiBold.otf"},
+  {"family": "Pretendard", "weight": 500, "url": "comp/fonts/Pretendard-Medium.otf"},
+  {"family": "Pretendard", "weight": 300, "url": "comp/fonts/Pretendard-Light.otf"},
+  {"family": "Hahmlet", "weight": "100 900", "url": "comp/fonts/Hahmlet-VF.ttf"},
+  {"family": "Unbounded", "weight": "200 900", "url": "comp/fonts/Unbounded-VF.ttf"},
+  {"family": "Plex Mono", "weight": 500, "url": "comp/fonts/IBMPlexMono-Medium.ttf"},
+  {"family": "Plex Mono", "weight": 600, "url": "comp/fonts/IBMPlexMono-SemiBold.ttf"}
+ ],
+ "clips": {},
+ "shots": [{"t0": 0, "t1": 20.0, "special": {"type": "color", "color": "#F3EEE4"}}],
+ "sfx": {"auto": false, "cues": [], "hits": false},
+ "audio": {"src": "audio/final_mix.m4a", "start": 0}
+}
