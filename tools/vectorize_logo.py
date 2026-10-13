@@ -90,8 +90,9 @@ def rdp(pts, eps):
     if len(pts) < 3: return pts
     a, b = pts[0], pts[-1]
     ab = b - a; n = np.hypot(*ab)
-    if n < 1e-9: d = np.hypot(*(pts - a).T)
-    else: d = np.abs(np.cross(ab, pts - a)) / n
+    v = pts - a
+    if n < 1e-9: d = np.hypot(*v.T)
+    else: d = np.abs(ab[0] * v[:, 1] - ab[1] * v[:, 0]) / n
     i = int(np.argmax(d))
     if d[i] > eps:
         return np.vstack([rdp(pts[:i + 1], eps)[:-1], rdp(pts[i:], eps)])
@@ -102,6 +103,27 @@ def simplify_closed(p, eps):
     i = 0; j = int(np.argmax(np.hypot(*(p - p[0]).T)))
     a = rdp(p[i:j + 1], eps); b = rdp(np.vstack([p[j:], p[:1]]), eps)
     return np.vstack([a[:-1], b[:-1]])
+
+def smooth_closed(p, step=1.5, sigma=1.6):
+    """Resample a closed contour to ~uniform spacing and Gaussian-smooth it along its length."""
+    q = np.vstack([p, p[:1]])
+    seg = np.hypot(*np.diff(q, axis=0).T)
+    L = float(seg.sum())
+    n = max(16, int(L / step))
+    s_ = np.concatenate([[0], np.cumsum(seg)])
+    t = np.linspace(0, L, n, endpoint=False)
+    x = np.interp(t, s_, q[:, 0]); y = np.interp(t, s_, q[:, 1])
+    r = int(math.ceil(sigma * 3)); k = np.exp(-np.arange(-r, r + 1) ** 2 / (2 * sigma * sigma)); k /= k.sum()
+    def circ(v):
+        vv = np.concatenate([v[-r:], v, v[:r]])
+        return np.convolve(vv, k, mode='valid')
+    return np.stack([circ(x), circ(y)], 1)
+
+def inside(pt, poly):
+    x, y = pt; xs, ys = poly[:, 0], poly[:, 1]
+    xj, yj = np.roll(xs, 1), np.roll(ys, 1)
+    c = ((ys > y) != (yj > y)) & (x < (xj - xs) * (y - ys) / (yj - ys + 1e-12) + xs)
+    return bool(c.sum() % 2)
 
 def area(p):
     x, y = p[:, 0], p[:, 1]
@@ -135,19 +157,33 @@ def main():
     for name, F in fields.items():
         F = gauss_blur(F, scale * 0.55)
         polys = marching_squares(F, 0.5)
-        polys = [simplify_closed(p, 0.35 * scale / 2) for p in polys]
+        polys = [simplify_closed(smooth_closed(p, 1.5, 1.6), 0.12 * scale) for p in polys]
         polys = [p for p in polys if abs(area(p)) > (scale * 3) ** 2]
         # colour = median of source pixels inside the layer core
         core = gauss_blur(fields[name], 0) > 0.9
         small = np.asarray(Image.fromarray((core * 255).astype(np.uint8)).resize((im.width, im.height), Image.BOX)) > 250
         col = np.median(srcarr[small], axis=0) if small.sum() > 20 else np.array([0, 0, 0])
         hexc = '#%02x%02x%02x' % tuple(int(round(c)) for c in col)
-        layer = {'name': name, 'color': hexc, 'polys': [[[round(float(x), 2), round(float(y), 2)] for x, y in p] for p in polys],
-                 'areas': [round(area(p), 1) for p in polys]}
+        # shapes = outer contours with their holes (opposite winding, contained)
+        A = [area(p) for p in polys]
+        sgn = 1 if max(A, key=abs) > 0 else -1
+        outers = [i for i, a_ in enumerate(A) if a_ * sgn > 0]
+        holes = [i for i, a_ in enumerate(A) if a_ * sgn < 0]
+        shapes = []
+        for i in outers:
+            shapes.append({'outer': i, 'holes': [], 'bbox': [float(polys[i][:, 0].min()), float(polys[i][:, 1].min()), float(polys[i][:, 0].max()), float(polys[i][:, 1].max())]})
+        for j in holes:
+            cands = [sh for sh in shapes if inside(polys[j][0], polys[sh['outer']])]
+            if cands:
+                best = min(cands, key=lambda sh: abs(A[sh['outer']]))
+                best['holes'].append(j)
+        R = lambda p: [[round(float(x), 2), round(float(y), 2)] for x, y in p]
+        layer = {'name': name, 'color': hexc,
+                 'shapes': [{'outer': R(polys[sh['outer']]), 'holes': [R(polys[j]) for j in sh['holes']], 'bbox': [round(v_, 1) for v_ in sh['bbox']]} for sh in shapes]}
         res['layers'].append(layer)
         d = ' '.join('M' + ' L'.join(f'{x:.1f},{y:.1f}' for x, y in p) + ' Z' for p in polys)
         svg.append(f'<path fill="{hexc}" fill-rule="evenodd" d="{d}"/>')
-        print(name, hexc, 'polys', len(polys), 'pts', sum(len(p) for p in polys))
+        print(name, hexc, 'polys', len(polys), 'shapes', len(layer['shapes']), 'pts', sum(len(p) for p in polys))
     svg.append('</svg>')
     json.dump(res, open(os.path.join(out, 'logo_vec.json'), 'w'))
     open(os.path.join(out, 'logo_vec.svg'), 'w').write('\n'.join(svg))
