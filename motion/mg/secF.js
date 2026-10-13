@@ -50,8 +50,8 @@ export async function draw(x, t, env) {
   camAt(t);
   const L = S.L;
   // ink roof strokes: clip-plane sweep left -> right
-  const sw = Ez.ioC(prog(t, b(44), b(45.2)));
-  S.clip.constant = lerp(-1.4, 1.6, sw);
+  const sw = Ez.ioQ(prog(t, b(44), b(45.2)));
+  S.clip.constant = lerp(-1.12, 1.6, sw);
   L.parts.roof.forEach((m, i) => {
     const h = m.userData.home;
     const rp = Ez.outExpo(prog(t, b(44) + i * 0.04, b(45.4)));
