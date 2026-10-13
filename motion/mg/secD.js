@@ -129,6 +129,8 @@ export async function draw(x, t, env) {
     const ex = Ez.inExpo(prog(t, b(31.5), b(32)));
     S.card.rotation.set(0.05 * Math.sin(t * 1.1), lerp(-1.75, 0, fl) + ex * 1.9 + 0.05 * Math.sin(t * 0.9), 0.02 * Math.sin(t * 0.7));
     S.card.position.set(0, -0.12 + (1 - fl) * -0.4, 0);
+    S.cardCam.position.z = 9.6 - 0.55 * Ez.ioQ(prog(t, b(28.5), b(31.6)));
+    S.cardCam.updateMatrixWorld(true);
     const r3 = render(S.cardScene, S.cardCam);
     // soft drop shadow under the card
     x.save();

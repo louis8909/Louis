@@ -56,11 +56,11 @@ export function camAt(t) {
   const word = new THREE.Vector3(0, 0, 0);
   // phase 1: drift/orbit around the word; phase 2: accelerate into the zero
   const p2 = prog(t, b(2), b(7.6));
-  const dive = Ez.inExpo(p2) * 0.82 + Ez.inQ(p2) * 0.18;
+  const dive = Ez.inExpo(p2) * 0.55 + Ez.inC(p2) * 0.45;
   const al = 1 - Ez.outC(clamp(p2 * 1.6));
   const yaw = lerp(-0.26, -0.1, prog(t, 0, b(2))) * al + smoothNoise(t * 0.9, 3) * 0.012 * al;
   const pitch = lerp(0.1, 0.05, prog(t, 0, b(2))) * al;
-  const dist0 = lerp(10.6, 9.4, Ez.outQ(prog(t, 0, b(2))));
+  const dist0 = lerp(13.5, 10.6, Ez.outExpo(prog(t, 0, 0.55))) - 1.2 * Ez.outQ(prog(t, 0.4, b(2)));
   const target = word.clone().lerp(S.zeroCentre, Ez.ioC(clamp(p2 * 1.6)));
   const dist = lerp(dist0, -0.9, dive);
   cam.position.set(target.x + Math.sin(yaw) * dist, target.y + Math.sin(pitch) * dist, target.z + Math.cos(yaw) * Math.cos(pitch) * dist);
@@ -79,8 +79,9 @@ export async function draw(x, t, env) {
   // subtle idle motion of the glyphs
   S.grp.children.forEach((m, i) => {
     const h = m.userData.home;
-    m.position.set(h.x, h.y + Math.sin(t * 2.2 + i) * 0.012, h.z);
-    m.rotation.y = Math.sin(t * 1.4 + i * 0.7) * 0.03;
+    const en = Ez.outExpo(prog(t, i * 0.07, i * 0.07 + 0.55));
+    m.position.set(h.x + (1 - en) * (i - 1) * 0.9, h.y + Math.sin(t * 2.2 + i) * 0.012 - (1 - en) * 0.4, h.z - (1 - en) * 7);
+    m.rotation.set((1 - en) * 0.9, Math.sin(t * 1.4 + i * 0.7) * 0.03 + (1 - en) * (i % 2 ? 2.2 : -2.2), 0);
   });
   // ---- background paper
   env.paper(x);

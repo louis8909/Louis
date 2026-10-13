@@ -52,6 +52,8 @@ function camAt(t) {
     const dt = t - LAND(i);
     if (dt >= 0 && dt < 0.3) kick += Math.exp(-dt * 22) * (i % 2 ? -1 : 1);
   }
+  // camera punch on every beat after the landings
+  for (let k = 10; k <= 12; k++) { const dt = t - b(k); if (dt >= 0 && dt < 0.3) dist -= Math.exp(-dt * 16) * 0.35; }
   // whip-out (4.50 -> 4.68): tilt up hard
   const wo = Ez.inExpo(prog(t, b(12.5), b(13)));
   cam.position.set(Math.sin(yaw) * dist, Math.sin(pitch) * dist + kick * 0.05, Math.cos(yaw) * dist);
@@ -74,6 +76,9 @@ export async function draw(x, t, env) {
     m.position.set(h.x + (1 - ef) * (i % 2 ? 0.5 : -0.5), h.y + (1 - ef) * 0.35, h.z + (1 - ef) * 4.2);
     m.rotation.set((1 - ef) * 0.5 + Math.sin(t * 1.7 + i) * 0.02, (1 - ef) * (i % 2 ? -0.7 : 0.7) + Math.sin(t * 1.3 + i * 0.9) * 0.04, (1 - ef) * (i % 2 ? 0.25 : -0.25));
     m.scale.set(1 + sq * 0.3, 1 + sq * 0.3, 1 - sq * 1.6);
+    // row bounce on beats 10 / 11 / 12 (row 0, 1, 2)
+    const row = Math.floor(i / 2), bt = t - b(10 + row);
+    if (bt >= 0 && bt < 0.35) m.position.z += Math.sin(bt / 0.35 * Math.PI) * 0.35 * Math.exp(-bt * 4);
   });
   env.paper(x);
   // colour slab behind the bottom row (wipes up on the first beat after the drop)

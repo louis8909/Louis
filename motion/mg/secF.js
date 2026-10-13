@@ -27,6 +27,9 @@ export function build(logoData) {
   const wall = shadowCatcher(20, 20, 0.16);
   wall.position.z = -0.12;
   sc.add(wall);
+  S.sweep = new THREE.PointLight(0xffffff, 0, 6, 1.6);
+  S.sweep.position.set(-3, 0.4, 1.3);
+  sc.add(S.sweep);
   S.L = L; S.sc = sc; S.cam = camera(30); S.wordMat = wordMat;
 }
 
@@ -36,7 +39,7 @@ function camAt(t) {
   const e = Ez.outExpo(p);
   const yaw = lerp(0.42, 0.0, e) + 0.012 * Math.sin(t * 0.6);
   const pitch = lerp(-0.22, 0.02, e);
-  const dist = lerp(6.2, 8.0, e) + (t - b(48)) * 0.06 * (t > b(48) ? 1 : 0);
+  const dist = lerp(6.2, 8.0, e) - 0.35 * Ez.ioQ(prog(t, b(48), 20));
   cam.position.set(Math.sin(yaw) * dist, 0.05 + Math.sin(pitch) * dist, Math.cos(yaw) * dist);
   cam.lookAt(0, 0.05, 0);
   cam.rotation.z += lerp(-0.05, 0, e);
@@ -75,6 +78,10 @@ export async function draw(x, t, env) {
   S.wordMat.opacity = 1;
   const wv = Ez.outC(prog(t, b(46), b(47)));
   L.parts.word.forEach((m) => (m.material.opacity = wv));
+  // light sweep across the glossy logo on the final hit (18.0 s)
+  const sp = prog(t, b(50) - 0.05, b(50) + 0.75);
+  S.sweep.position.x = lerp(-2.6, 2.8, Ez.ioQ(sp));
+  S.sweep.intensity = sp > 0 && sp < 1 ? Math.sin(sp * Math.PI) * 9 : 0;
   env.paper(x);
   x.drawImage(render(S.sc, S.cam), 0, 0, W, H);
   // tagline

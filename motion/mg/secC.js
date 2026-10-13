@@ -40,7 +40,7 @@ function camAt(t) {
   const wi = Ez.outExpo(prog(t, b(13), b(13.6)));
   const tilt = lerp(0.12, 0.78, Ez.ioQ(prog(t, b(13.4), b(17)))) + 0.04 * Math.sin(t * 0.7);
   const az = lerp(-0.25, 0.32, Ez.ioQ(p));
-  let dist = lerp(7.9, 7.1, Ez.ioQ(p));
+  let dist = lerp(6.5, 5.9, Ez.ioQ(p));
   // exit: dive into 전주
   const ex = Ez.inExpo(prog(t, b(23), b(24)));
   const tg = new THREE.Vector3(lerp(0, S.jj.c[0], ex), lerp(-0.25, S.jj.c[1], ex), 0);
@@ -60,7 +60,7 @@ export async function draw(x, t, env) {
     const h = Math.max(0.0005, r.h * rp);
     // colour: base -> BI colour on its wave beat
     const wave = WAVE[r.ci];
-    const cp = Ez.outC(prog(t, wave + r.d * 0.12, wave + r.d * 0.12 + 0.2));
+    const cp = 0.38 + 0.62 * Ez.outC(prog(t, wave + r.d * 0.12, wave + r.d * 0.12 + 0.2));
     r.meshes.forEach((m) => {
       m.scale.z = h;
       m.position.z = 0;
