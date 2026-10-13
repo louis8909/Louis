@@ -7,7 +7,7 @@ const S = {};
 export const range = [b(32), b(44)];
 const TURN = [b(35), b(38), b(41)]; // a face lands on each of these beats
 const CARDS = [
-  { id: '01', title: '경영', bg: COL.green, fg: COL.paper, sub1: '업체당 경영 지원', sub2: '인건비 · 재료비 사용 제외', hl: COL.ink, icon: 'bars' },
+  { id: '01', title: '경영', bg: COL.green, fg: COL.paper, sub1: '업체당 경영 지원', sub2: '인건비 · 재료비 제외', hl: COL.ink, icon: 'bars' },
   { id: '02', title: '홍보', bg: COL.yellow, fg: COL.ink, sub1: '방송사 연계 TV 홍보', sub2: '인증서 · 인증현판 제공', hl: COL.paper, icon: 'tv' },
   { id: '03', title: '멘토링', bg: COL.paper, fg: COL.ink, sub1: '전담 멘토 매칭', sub2: '맞춤형 멘토링', hl: COL.red, icon: 'bubbles' },
   { id: '04', title: '금융', bg: COL.ink, fg: COL.paper, sub1: '특례보증 지원', sub2: '보증료율 고정', hl: COL.yellow, icon: 'shield' },

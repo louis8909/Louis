@@ -123,7 +123,7 @@ export async function draw(x, t, env) {
   kText(x, '전북에서', W / 2, 560, { w: 800, s: 84, ls: -2, align: 'c', fill: COL.ink }, prog(t, 0.0, 0.42), 'rise', 0.14, out1);
   kText(x, '한 길을 지켜온', W / 2, 1238, { w: 700, s: 70, ls: -2, align: 'c', fill: COL.ink }, prog(t, b(1), b(1) + 0.4), 'rise', 0.08, out1);
   // label bars: 소상공인 / 가업승계자
-  const lo = prog(t, b(6.6), b(7.4));
+  const lo = prog(t, b(6.2), b(6.75));
   const y1 = 1452, y2 = 1612;
   wipeRect(x, 96, y1 - 112, 560, 148, prog(t, b(4), b(4) + 0.22), lo, COL.ink, 'l', 14);
   if (t >= b(4) + 0.05) kText(x, '소상공인', 136, y1, { w: 900, s: 110, ls: -4, fill: COL.paper }, prog(t, b(4) + 0.05, b(4) + 0.32), 'rise', 0.1, lo);

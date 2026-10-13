@@ -6,6 +6,7 @@ import { THREE, G, camera, clay, lightRig, render, project, roundBox, shadowCatc
 const S = {};
 export const range = [b(24), b(32)];
 const HS = 0.34; // slab height = 10 years
+const SLAB_T = (k) => b(24.4) + (k - 3) * 0.135; // arrival of the 40..100 slabs
 
 export function build() {
   const sc = new THREE.Scene();
@@ -74,7 +75,7 @@ export async function draw(x, t, env) {
   if (cardIn < 1) {
     camAt(t);
     S.slabs.forEach((m, k) => {
-      const appear = k < 3 ? 1 : Ez.outBack(prog(t, b(24.4) + (k - 3) * 0.12, b(24.4) + (k - 3) * 0.12 + 0.3), 2.0);
+      const appear = k < 3 ? 1 : Ez.outBack(prog(t, SLAB_T(k), SLAB_T(k) + 0.3), 2.0);
       m.visible = appear > 0.001;
       m.scale.setScalar(Math.max(0.001, appear));
       m.position.y = m.userData.y + (1 - appear) * 0.6;
@@ -97,9 +98,10 @@ export async function draw(x, t, env) {
       });
     }
   }
-  // ---- counter 30 -> 100
-  const cp = Ez.outExpo(prog(t, b(24.3), b(27)));
-  const n = Math.round(lerp(30, 100, cp));
+  // ---- counter 30 -> 100, one ten per arriving slab
+  let nv = 30;
+  for (let k = 3; k < 10; k++) nv += 10 * Ez.outC(prog(t, SLAB_T(k), SLAB_T(k) + 0.135));
+  const n = Math.round(nv);
   const out = prog(t, b(27.6), b(28.2));
   if (out < 1) {
     x.save();

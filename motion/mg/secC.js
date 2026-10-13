@@ -39,8 +39,8 @@ function camAt(t) {
   // entry whip: from looking far "up" (sky) down onto the map
   const wi = Ez.outExpo(prog(t, b(13), b(13.6)));
   const tilt = lerp(0.12, 0.78, Ez.ioQ(prog(t, b(13.4), b(17)))) + 0.04 * Math.sin(t * 0.7);
-  const az = lerp(-0.25, 0.32, Ez.ioQ(p));
-  let dist = lerp(6.5, 5.9, Ez.ioQ(p));
+  const az = lerp(-0.2, 0.22, Ez.ioQ(p));
+  let dist = lerp(7.2, 6.6, Ez.ioQ(p));
   // exit: dive into 전주
   const ex = Ez.inExpo(prog(t, b(23), b(24)));
   const tg = new THREE.Vector3(lerp(0, S.jj.c[0], ex), lerp(-0.25, S.jj.c[1], ex), 0);
