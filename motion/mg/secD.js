@@ -74,7 +74,7 @@ export async function draw(x, t, env) {
   if (cardIn < 1) {
     camAt(t);
     S.slabs.forEach((m, k) => {
-      const appear = k < 3 ? 1 : Ez.outBack(prog(t, b(24) + (k - 3) * 0.13, b(24) + (k - 3) * 0.13 + 0.3), 2.0);
+      const appear = k < 3 ? 1 : Ez.outBack(prog(t, b(24.4) + (k - 3) * 0.12, b(24.4) + (k - 3) * 0.12 + 0.3), 2.0);
       m.visible = appear > 0.001;
       m.scale.setScalar(Math.max(0.001, appear));
       m.position.y = m.userData.y + (1 - appear) * 0.6;
@@ -107,13 +107,13 @@ export async function draw(x, t, env) {
     const s = 250;
     const w1 = env.measure(String(n), { fam: 'Unbounded', w: 900, s });
     const kick = Math.exp(-Math.max(0, t - b(27)) * 14) * (t >= b(27) ? 1 : 0);
-    x.translate(90, 470 - out * 120);
+    x.translate(90, 430 - out * 120);
     x.scale(1 + kick * 0.06, 1 + kick * 0.06);
-    text(x, String(n), 0, 0, { fam: 'Unbounded', w: 900, s, ls: -10, fill: COL.paper });
-    text(x, '년', w1 + 4, 0, { w: 900, s: 200, ls: -4, fill: COL.ink });
+    text(x, String(n), 0, 0, { fam: 'Unbounded', w: 900, s, ls: -10, fill: COL.ink });
+    text(x, '년', w1 + 4, 0, { w: 900, s: 200, ls: -4, fill: COL.paper });
     x.restore();
-    kText(x, '이상 존속 · 성장', 96, 600, { w: 800, s: 70, ls: -2, fill: COL.ink }, prog(t, b(26), b(26) + 0.4), 'rise', 0.06, out);
-    env.mono(x, 'SUSTAIN  ·  GROW  ·  100+ YEARS', 98, 660, { alpha: prog(t, b(26.5), b(27)) * (1 - out), color: COL.ink });
+    kText(x, '이상 존속 · 성장', 96, 560, { w: 800, s: 70, ls: -2, fill: COL.ink }, prog(t, b(26), b(26) + 0.4), 'rise', 0.06, out);
+    env.mono(x, 'SUSTAIN  ·  GROW  ·  100+ YEARS', 98, 620, { alpha: prog(t, b(26.5), b(27)) * (1 - out), color: COL.ink });
   }
   // ---- succession card
   if (cardIn > 0) {

@@ -71,7 +71,7 @@ export async function draw(x, t, env) {
     m.visible = true;
     const ef = Ez.inQ(fall);
     const sq = settle > 0 ? Math.sin(settle * Math.PI) * Math.exp(-settle * 3) * 0.16 : 0; // squash on impact
-    m.position.set(h.x + (1 - ef) * (i % 2 ? 0.5 : -0.5), h.y + (1 - ef) * 0.35, h.z + (1 - ef) * 6.5);
+    m.position.set(h.x + (1 - ef) * (i % 2 ? 0.5 : -0.5), h.y + (1 - ef) * 0.35, h.z + (1 - ef) * 4.2);
     m.rotation.set((1 - ef) * 0.5 + Math.sin(t * 1.7 + i) * 0.02, (1 - ef) * (i % 2 ? -0.7 : 0.7) + Math.sin(t * 1.3 + i * 0.9) * 0.04, (1 - ef) * (i % 2 ? 0.25 : -0.25));
     m.scale.set(1 + sq * 0.3, 1 + sq * 0.3, 1 - sq * 1.6);
   });
