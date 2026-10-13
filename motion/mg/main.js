@@ -83,7 +83,7 @@ async function compose(x, t) {
 
 // motion-blur sample count per time window (whips, drops, cube turns)
 const MB = [
-  [b(6.8), b(8), 4], [b(8), b(9.6), 3], [b(12.4), b(13.7), 6], [b(23), b(24.8), 5], [b(24), b(25.5), 3],
+  [b(6.8), b(8), 4], [b(8), b(9.6), 3], [b(12.4), b(13.7), 6], [b(23), b(24.8), 5], [b(24), b(24.5), 3],
   [b(28), b(29.3), 3], [b(31.4), b(32.5), 5], [b(34.4), b(35.3), 5], [b(37.4), b(38.3), 5], [b(40.4), b(41.3), 5],
   [b(43.4), b(44.0), 5],
 ];
@@ -129,31 +129,51 @@ function grain(x, t) {
   x.restore();
 }
 
+// beat pump: a small whole-frame scale kick on every beat after the drop, stronger on bar downbeats
+function pump(t) {
+  if (t < b(8) || t >= b(44)) return 0;
+  const k = Math.floor(t / b(1) + 1e-6), dt = t - b(k);
+  const amp = k % 4 === 0 ? 0.016 : 0.007;
+  return amp * Math.exp(-dt * 13);
+}
+
 export async function frame(S, x) {
   const t = S.t;
   x.setTransform(RS, 0, 0, RS, 0, 0);
   x.globalAlpha = 1;
   x.globalCompositeOperation = 'source-over';
   const n = mbSamples(t);
-  if (n <= 1) {
+  const pz = pump(t);
+  if (n <= 1 && pz < 0.0005) {
     await compose(x, t);
   } else {
-    const shutter = 0.5 / FPS;
-    const ax = ctxOf(ACC), tx = ctxOf(TMP);
-    for (let k = 0; k < n; k++) {
-      const tk = t + (k / (n - 1) - 0.5) * shutter;
-      tx.setTransform(RS, 0, 0, RS, 0, 0);
+    let src = TMP;
+    if (n <= 1) {
+      const tx = ctxOf(TMP);
       tx.globalAlpha = 1;
       tx.clearRect(0, 0, W, H);
-      await compose(tx, Math.max(0, tk));
-      ax.setTransform(1, 0, 0, 1, 0, 0);
-      ax.globalAlpha = k === 0 ? 1 : 1 / (k + 1);
-      ax.drawImage(TMP, 0, 0);
+      await compose(tx, t);
+    } else {
+      const shutter = 0.5 / FPS;
+      const ax = ctxOf(ACC), tx = ctxOf(TMP);
+      for (let k = 0; k < n; k++) {
+        const tk = t + (k / (n - 1) - 0.5) * shutter;
+        tx.setTransform(RS, 0, 0, RS, 0, 0);
+        tx.globalAlpha = 1;
+        tx.clearRect(0, 0, W, H);
+        await compose(tx, Math.max(0, tk));
+        ax.setTransform(1, 0, 0, 1, 0, 0);
+        ax.globalAlpha = k === 0 ? 1 : 1 / (k + 1);
+        ax.drawImage(TMP, 0, 0);
+      }
+      src = ACC;
     }
+    // composite (scaled about the centre by the beat pump) in physical pixels
+    const s = 1 + pz, PWw = src.width, PHh = src.height;
     x.save();
     x.setTransform(1, 0, 0, 1, 0, 0);
     x.globalAlpha = 1;
-    x.drawImage(ACC, 0, 0);
+    x.drawImage(src, -(s - 1) * PWw / 2, -(s - 1) * PHh / 2, PWw * s, PHh * s);
     x.restore();
   }
   x.setTransform(RS, 0, 0, RS, 0, 0);
