@@ -18,7 +18,7 @@ export function build(logoData) {
     red: clay('#B52D2A', { rough: 0.45, cc: 0.4 }),
   };
   // wordmark glyphs get their own ink material without the sweep clip
-  const L = buildLogo(logoData, 2.5, 0.075, mats);
+  const L = buildLogo(logoData, 2.08, 0.07, mats);
   const wordMat = clay(COL.ink, { rough: 0.42, cc: 0.45, transparent: true });
   L.parts.word.forEach((m) => (m.material = wordMat));
   L.parts.pebbles.forEach((m) => { if (m.userData.layer === 'ink') m.material = clay(COL.ink, { rough: 0.42, cc: 0.45 }); });
@@ -61,7 +61,7 @@ export async function draw(x, t, env) {
     const h = m.userData.home;
     m.visible = pp > 0;
     const e = Ez.outBack(pp, 1.6);
-    m.position.set(h.x, h.y + (1 - e) * 0.5, h.z);
+    m.position.set(h.x, h.y - (1 - e) * 0.16, h.z + (1 - Ez.outC(pp)) * 0.25);
     m.scale.setScalar(Math.max(0.001, lerp(0.6, 1, Ez.outC(pp))));
   });
   // wordmark: syllables rise on 32nds

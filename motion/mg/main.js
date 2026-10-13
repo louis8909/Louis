@@ -24,6 +24,7 @@ export async function init(R, E, util) {
   RS = R.rs || 1;
   await initGL(R.PW, R.PH);
   await loadFont('pblack', '/comp/fonts/Pretendard-Black.otf');
+  await loadFont('ublack', '/comp/fonts/Unbounded-Black.ttf');
   const logo = await (await fetch('/assets/logo/logo_vec.json')).json();
   const map = await (await fetch('/assets/map/jb_map_hd.json')).json();
   PAPER = makePaper(Math.round(W * RS), Math.round(H * RS));

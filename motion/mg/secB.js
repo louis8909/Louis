@@ -15,9 +15,9 @@ export function build() {
   const inkSide = clay(COL.ink2, { rough: 0.5, cc: 0.25 });
   const green = clay(COL.green, { rough: 0.4, cc: 0.5 });
   const greenSide = clay(COL.greenD, { rough: 0.5, cc: 0.25 });
-  const size = 1.22, depth = 0.38;
+  const size = 1.0, depth = 0.34;
   const rows = [['전북', [ink, inkSide]], ['천년', [green, greenSide]], ['명가', [ink, inkSide]]];
-  const ys = [1.32, 0.0, -1.32];
+  const ys = [1.08, -0.08, -1.24];
   S.glyphs = [];
   rows.forEach(([str, mats], r) => {
     const run = glyphMeshes('pblack', str, size, depth, mats, { tol: 0.35, ls: -0.03 });
@@ -45,7 +45,7 @@ function camAt(t) {
   const p = prog(t, range[0], range[1]);
   const yaw = lerp(0.2, -0.16, Ez.ioQ(p)) + smoothNoise(t * 0.8, 2) * 0.01;
   const pitch = lerp(-0.12, 0.05, Ez.outQ(p));
-  let dist = lerp(8.6, 10.4, Ez.outC(p));
+  let dist = lerp(9.4, 11.0, Ez.outC(p));
   // landing kicks
   let kick = 0;
   for (let i = 0; i < 6; i++) {
@@ -81,8 +81,8 @@ export async function draw(x, t, env) {
   x.drawImage(render(S.sc, S.cam), 0, 0, W, H);
   // copy
   const out = prog(t, b(12.1), b(12.8));
-  kText(x, '전북특별자치도가', W / 2, 255, { w: 800, s: 64, ls: -1.5, align: 'c', fill: COL.ink }, prog(t, b(9.5), b(9.5) + 0.42), 'rise', 0.07, out);
-  kText(x, '공식 인증한', W / 2, 345, { w: 800, s: 64, ls: -1.5, align: 'c', fill: COL.ink }, prog(t, b(10), b(10) + 0.36), 'rise', 0.09, out);
+  kText(x, '전북특별자치도가', W / 2, 228, { w: 800, s: 64, ls: -1.5, align: 'c', fill: COL.ink }, prog(t, b(9.5), b(9.5) + 0.42), 'rise', 0.07, out);
+  kText(x, '공식 인증한', W / 2, 312, { w: 800, s: 64, ls: -1.5, align: 'c', fill: COL.ink }, prog(t, b(10), b(10) + 0.36), 'rise', 0.09, out);
   // bottom pill: 전통명가
   const pp = prog(t, b(10.5), b(10.5) + 0.3);
   wipeRect(x, W / 2 - 250, 1668, 500, 126, pp, out, COL.ink, 'l', 63);

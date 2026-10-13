@@ -13,9 +13,9 @@ export function build() {
   const yellowSide = clay(COL.yellowD, { rough: 0.5, cc: 0.2 });
   const ink = clay(COL.ink, { rough: 0.42, cc: 0.45 });
   const inkSide = clay(COL.ink2, { rough: 0.55, cc: 0.2 });
-  const size = 1.15, depth = 0.34;
-  const num = glyphMeshes('pblack', '30', size, depth, [yellow, yellowSide], { tol: 0.35, ls: -0.02, anchor: 0.5 });
-  const nyeon = glyphMeshes('pblack', '년', size * 0.86, depth, [ink, inkSide], { tol: 0.35 });
+  const size = 0.98, depth = 0.26;
+  const num = glyphMeshes('ublack', '30', size, depth, [yellow, yellowSide], { tol: 0.3, ls: -0.03, anchor: 0.5 });
+  const nyeon = glyphMeshes('pblack', '년', size * 1.02, depth, [ink, inkSide], { tol: 0.3 });
   const grp = new THREE.Group();
   num.meshes.forEach((m) => grp.add(m));
   // place 년 after the digits, baseline-aligned
@@ -56,8 +56,9 @@ export function camAt(t) {
   // phase 1: drift/orbit around the word; phase 2: accelerate into the zero
   const p2 = prog(t, b(2), b(7.6));
   const dive = Ez.inExpo(p2) * 0.82 + Ez.inQ(p2) * 0.18;
-  const yaw = lerp(-0.26, -0.1, prog(t, 0, b(2))) * (1 - Ez.outC(p2)) + smoothNoise(t * 0.9, 3) * 0.015;
-  const pitch = lerp(0.1, 0.05, prog(t, 0, b(2))) * (1 - Ez.outC(p2));
+  const al = 1 - Ez.outC(clamp(p2 * 1.6));
+  const yaw = lerp(-0.26, -0.1, prog(t, 0, b(2))) * al + smoothNoise(t * 0.9, 3) * 0.012 * al;
+  const pitch = lerp(0.1, 0.05, prog(t, 0, b(2))) * al;
   const dist0 = lerp(10.6, 9.4, Ez.outQ(prog(t, 0, b(2))));
   const target = word.clone().lerp(S.zeroCentre, Ez.ioC(clamp(p2 * 1.6)));
   const dist = lerp(dist0, -0.9, dive);

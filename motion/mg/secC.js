@@ -13,7 +13,7 @@ export function build(mapData) {
   const sc = new THREE.Scene();
   const tgt = new THREE.Object3D();
   lightRig(sc, { key: 2.2, hemi: 0.62, keyPos: [-4, -5, 9], shadow: true, shadowSize: 3.2, shadowRes: 2048, shadowRadius: 8, target: tgt });
-  const M = buildMap(mapData, 3.3, { base: COL.paperDeep });
+  const M = buildMap(mapData, 2.62, { base: '#D9CEBB' });
   sc.add(M.group);
   const ground = shadowCatcher(20, 20, 0.2);
   ground.position.z = -0.001;
@@ -29,7 +29,7 @@ export function build(mapData) {
   const order = [...M.regions].sort((p, q) => p.d - q.d);
   order.forEach((r, k) => (r.rise = b(13.5) + k * b(0.25) * 0.55));
   S.M = M; S.sc = sc; S.cam = camera(30); S.jj = jj;
-  S.base = new THREE.Color(COL.paperDeep);
+  S.base = new THREE.Color('#D9CEBB');
   S.cols = PAL.map((c) => new THREE.Color(c));
 }
 
@@ -40,7 +40,7 @@ function camAt(t) {
   const wi = Ez.outExpo(prog(t, b(13), b(13.6)));
   const tilt = lerp(0.12, 0.78, Ez.ioQ(prog(t, b(13.4), b(17)))) + 0.04 * Math.sin(t * 0.7);
   const az = lerp(-0.25, 0.32, Ez.ioQ(p));
-  let dist = lerp(7.4, 6.4, Ez.ioQ(p));
+  let dist = lerp(7.9, 7.1, Ez.ioQ(p));
   // exit: dive into 전주
   const ex = Ez.inExpo(prog(t, b(23), b(24)));
   const tg = new THREE.Vector3(lerp(0, S.jj.c[0], ex), lerp(-0.25, S.jj.c[1], ex), 0);
@@ -64,7 +64,8 @@ export async function draw(x, t, env) {
     r.meshes.forEach((m) => {
       m.scale.z = h;
       m.position.z = 0;
-      m.material.color.copy(S.base).lerp(S.cols[r.ci], cp);
+      m.material[0].color.copy(S.base).lerp(S.cols[r.ci], cp);
+      m.material[1].color.copy(m.material[0].color).multiplyScalar(0.78);
     });
   });
   env.paper(x);

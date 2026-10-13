@@ -12,7 +12,7 @@ const CARDS = [
   { id: '03', title: '멘토링', bg: COL.paper, fg: COL.ink, sub1: '전담 멘토 매칭', sub2: '맞춤형 멘토링', hl: COL.red, icon: 'bubbles' },
   { id: '04', title: '금융', bg: COL.ink, fg: COL.paper, sub1: '특례보증 지원', sub2: '보증료율 고정', hl: COL.yellow, icon: 'shield' },
 ];
-const ICON = 760; // icon render size (logical px)
+const ICON = 860; // icon render size (logical px)
 
 function iconScene(kind, env) {
   const sc = new THREE.Scene();
@@ -50,7 +50,7 @@ function iconScene(kind, env) {
     // ShapeGeometry UVs follow shape coordinates: remap to 0..1
     const uv = scr.geometry.attributes.uv, pos = scr.geometry.attributes.position;
     for (let i = 0; i < uv.count; i++) uv.setXY(i, (pos.getX(i) + 1.04) / 2.08, (pos.getY(i) + 0.73) / 1.46);
-    scr.position.set(-0.0, 0.0, 0.47);
+    scr.position.set(0.0, 0.0, 0.58);
     g.add(scr);
     g.userData.screen = { cv, tex };
     for (const sx of [-1, 1]) {
@@ -108,7 +108,7 @@ function iconScene(kind, env) {
     g.userData.coins = [];
     for (let i = 0; i < 4; i++) {
       const co = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.13, 40), M(i % 2 ? COL.paper : COL.paper2, { rough: 0.35, cc: 0.6 }));
-      co.position.set(1.15, -1.15 + i * 0.15, 0.5);
+      co.position.set(1.12, -1.2 + i * 0.16, 0.75);
       g.add(co);
       g.userData.coins.push(co);
     }
@@ -147,7 +147,7 @@ export function build() {
 
 function faceAngle(t) {
   let a = 0;
-  TURN.forEach((tk) => { a += Ez.ioExpo(prog(t, tk - 0.17, tk + 0.07)); });
+  TURN.forEach((tk) => { a += Ez.ioExpo(prog(t, tk - 0.21, tk + 0.09)); });
   return a; // number of quarter turns completed
 }
 
@@ -186,9 +186,9 @@ async function drawCard(k, t) {
     ic.g.userData.screen.tex.needsUpdate = true;
   }
   if (ic.kind === 'bubbles') ic.g.userData.b.forEach((m, i) => (m.position.y = (i ? -0.78 : 0.62) + Math.sin(t * 3 + i * 1.7) * 0.05));
-  if (ic.kind === 'shield') ic.g.userData.coins.forEach((m, i) => { const cp = Ez.outBack(clamp((lt - 0.15 - i * 0.06) / 0.3), 2); m.position.y = -1.15 + i * 0.15 + (1 - cp) * 1.2; m.visible = cp > 0.01; });
+  if (ic.kind === 'shield') ic.g.userData.coins.forEach((m, i) => { const cp = Ez.outBack(clamp((lt - 0.15 - i * 0.06) / 0.3), 2); m.position.y = -1.2 + i * 0.16 + (1 - cp) * 1.2; m.visible = cp > 0.01; });
   const ir = renderWith(S.r2, ic.sc, ic.cam);
-  x.drawImage(ir, (W - ICON) / 2, 330, ICON, ICON);
+  x.drawImage(ir, (W - ICON) / 2, 290, ICON, ICON);
   // title + sublines
   const out = 0;
   kText(x, c.title, 84, 1440, { w: 900, s: c.title.length > 2 ? 210 : 250, ls: -10, fill: c.fg }, p(0.08, 0.42), 'rise', 0.1, out);

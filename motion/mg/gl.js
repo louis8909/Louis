@@ -309,10 +309,10 @@ export function buildMap(data, width, o = {}) {
     const meshes = [];
     for (const sh of shapes) {
       const rr = [sh.outer.map(([x, y]) => [(x - ax / 2) * s, (y - ay / 2) * s]), ...sh.holes.map((h) => h.map(([x, y]) => [(x - ax / 2) * s, (y - ay / 2) * s]))];
-      const geo = extrude(rr, 1, { bevel: true, bt: 0.0, bs: width * 0.0016, bseg: 1 });
+      const geo = extrude(rr, 1, { bevel: false });
       // geometry spans z 0..1 (+bevel); we scale z for height animation
       geo.translate(0, 0, 0);
-      const mat = clay(o.base || COL.paperDeep, { rough: 0.55, cc: 0.2 });
+      const mat = [clay(o.base || COL.paperDeep, { rough: 0.55, cc: 0.2 }), clay(o.base || COL.paperDeep, { rough: 0.6, cc: 0.1 })];
       const m = new THREE.Mesh(geo, mat);
       m.castShadow = true; m.receiveShadow = true;
       meshes.push(m);

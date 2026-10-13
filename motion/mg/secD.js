@@ -5,7 +5,7 @@ import { THREE, G, camera, clay, lightRig, render, project, roundBox, shadowCatc
 
 const S = {};
 export const range = [b(24), b(32)];
-const HS = 0.44; // slab height = 10 years
+const HS = 0.34; // slab height = 10 years
 
 export function build() {
   const sc = new THREE.Scene();
@@ -16,13 +16,14 @@ export function build() {
   S.slabs = [];
   for (let k = 0; k < 10; k++) {
     const col = k < 3 ? COL.ink : k === 9 ? COL.yellow : k % 2 ? COL.paper : COL.paper2;
-    const m = roundBox(1.55, HS * 0.9, 1.55, 0.09, clay(col, { rough: k < 3 ? 0.42 : 0.5, cc: 0.35 }));
+    const m = roundBox(1.0, HS * 0.88, 1.0, 0.07, clay(col, { rough: k < 3 ? 0.42 : 0.5, cc: 0.35 }));
     m.rotation.x = 0;
     m.position.set(0, HS * k + HS * 0.45, 0);
     m.userData.y = m.position.y;
     tower.add(m);
     S.slabs.push(m);
   }
+  tower.position.x = 0.62;
   sc.add(tower);
   const ground = shadowCatcher(30, 30, 0.22);
   ground.rotation.x = -Math.PI / 2;
@@ -47,11 +48,11 @@ function camAt(t) {
   const cr = Ez.ioC(prog(t, b(24), b(27)));
   const yTop = lerp(HS * 3, HS * 10, cr);
   const az = lerp(0.62, 0.35, prog(t, b(24), b(28))) + 0.05 * Math.sin(t * 0.8);
-  const dist = lerp(5.4, 6.8, Ez.outQ(prog(t, b(24), b(28))));
+  const dist = lerp(7.6, 8.8, Ez.outQ(prog(t, b(24), b(28))));
   // entry: arrive from a dive (continuing section C's motion)
   const en = 1 - Ez.outExpo(prog(t, b(24), b(24.6)));
-  cam.position.set(Math.sin(az) * dist, yTop + 0.9 + en * 3.5, Math.cos(az) * dist);
-  cam.lookAt(0, yTop - 0.35 - en * 1.5, 0);
+  cam.position.set(0.2 + Math.sin(az) * dist, yTop + 1.0 + en * 3.5, Math.cos(az) * dist);
+  cam.lookAt(0.2, yTop - 0.9 - en * 1.5, 0);
   cam.rotation.z += en * 0.25;
   cam.updateMatrixWorld(true);
 }
@@ -90,7 +91,7 @@ export async function draw(x, t, env) {
     if (la > 0) {
       S.slabs.forEach((m, k) => {
         if (m.scale.x < 0.6) return;
-        const [px, py, pz] = project(new THREE.Vector3(0.8, m.position.y, 0.8), S.cam);
+        const [px, py, pz] = project(new THREE.Vector3(0.62 + 0.55, m.position.y, 0.55), S.cam);
         if (pz > 1) return;
         env.mono(x, `${(k + 1) * 10}`, px + 26, py + 8, { alpha: la, color: k < 3 ? COL.paper : COL.ink, size: 26 });
       });
@@ -137,7 +138,7 @@ export async function draw(x, t, env) {
     x.beginPath(); x.roundRect(W / 2 - 290 * Math.cos(S.card.rotation.y), 560, 580 * Math.max(0.05, Math.cos(S.card.rotation.y)), 900, 40); x.fill();
     x.restore();
     x.drawImage(r3, 0, 0, W, H);
-    kText(x, '지속가능한', W / 2, 330, { w: 800, s: 80, ls: -2.5, align: 'c', fill: COL.ink }, prog(t, b(28.5), b(28.5) + 0.4), 'rise', 0.08, ex);
+    kText(x, '지속가능한', W / 2, 232, { w: 800, s: 80, ls: -2.5, align: 'c', fill: COL.ink }, prog(t, b(28.5), b(28.5) + 0.4), 'rise', 0.08, ex);
     wipeRect(x, W / 2 - 330, 1528, 660, 170, prog(t, b(29.5), b(29.5) + 0.26), ex, COL.ink, 'l', 16);
     kText(x, '가업승계', W / 2, 1655, { w: 900, s: 136, ls: -5, align: 'c', fill: COL.paper }, prog(t, b(29.5) + 0.05, b(29.5) + 0.42), 'rise', 0.08, ex);
     env.mono(x, 'FAMILY BUSINESS SUCCESSION', W / 2, 1760, { align: 'c', alpha: prog(t, b(30), b(30.5)) * (1 - ex), color: COL.ink });
