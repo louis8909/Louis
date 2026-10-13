@@ -39,12 +39,13 @@ export function build() {
 }
 
 // footage schedule inside the counter (source seconds in plate P, 24 fps)
+// [from, to, source second, focus x, focus y] — focus keeps hands / faces / steam inside the counter
 const CUTS = [
-  [b(2), b(4), 0.35], [b(4), b(5), 2.95], [b(5), b(6), 5.7], [b(6), b(6.5), 1.25],
-  [b(6.5), b(7), 3.35], [b(7), b(7.5), 6.55], [b(7.5), b(8) + 0.01, 3.75],
+  [b(2), b(4), 0.35, 0.52, 0.30], [b(4), b(5), 2.95, 0.5, 0.36], [b(5), b(6), 5.7, 0.5, 0.30], [b(6), b(6.5), 1.25, 0.52, 0.30],
+  [b(6.5), b(7), 3.35, 0.5, 0.36], [b(7), b(7.5), 6.55, 0.5, 0.30], [b(7.5), b(8) + 0.01, 3.75, 0.5, 0.42],
 ];
 export function footageAt(t) {
-  for (const [a, c, src] of CUTS) if (t >= a && t < c) return { src: src + (t - a), a, c };
+  for (const [a, c, src, ax, ay] of CUTS) if (t >= a && t < c) return { src: src + (t - a), a, c, ax, ay };
   return null;
 }
 
@@ -100,8 +101,18 @@ export async function draw(x, t, env) {
       x.closePath();
       x.clip();
     }
-    const zoom = 1.06 + 0.05 * prog(t, f.a, f.c);
-    drawCover(x, im, 0, 0, W, H, zoom);
+    const zoom = 1.04 + 0.05 * prog(t, f.a, f.c);
+    if (behind) drawCover(x, im, 0, 0, W, H, zoom, f.ax, f.ay);
+    else {
+      // frame the footage on the counter's bounding box, blending to full screen as the hole grows
+      let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+      pts.forEach(([px, py]) => { x0 = Math.min(x0, px); x1 = Math.max(x1, px); y0 = Math.min(y0, py); y1 = Math.max(y1, py); });
+      const cov = clamp(Math.sqrt(((x1 - x0) * (y1 - y0)) / (W * H)));
+      const k = Ez.ioC(prog(cov, 0.3, 0.95));
+      const pad = 1.18;
+      const bw = (x1 - x0) * pad, bh = (y1 - y0) * pad, bx = (x0 + x1) / 2 - bw / 2, by = (y0 + y1) / 2 - bh / 2;
+      drawCover(x, im, lerp(bx, 0, k), lerp(by, 0, k), lerp(bw, W, k), lerp(bh, H, k), zoom, f.ax, f.ay);
+    }
     x.restore();
   }
   // ---- 3D word

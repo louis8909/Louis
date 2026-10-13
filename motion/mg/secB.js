@@ -69,11 +69,11 @@ export async function draw(x, t, env) {
     const settle = prog(t, tl, tl + 0.3);
     if (t < tl - 0.17) { m.visible = false; return; }
     m.visible = true;
-    const y = lerp(h.y + 4.6, h.y, Ez.inQ(fall));
+    const ef = Ez.inQ(fall);
     const sq = settle > 0 ? Math.sin(settle * Math.PI) * Math.exp(-settle * 3) * 0.16 : 0; // squash on impact
-    m.position.set(h.x, y - sq * 0.25, h.z + (1 - fall) * 0.6);
-    m.rotation.set(lerp(-1.1, 0, Ez.outQ(fall)) + Math.sin(t * 1.7 + i) * 0.02, Math.sin(t * 1.3 + i * 0.9) * 0.04, (1 - fall) * (i % 2 ? 0.2 : -0.2));
-    m.scale.set(1 + sq * 0.4, 1 - sq, 1 + sq * 0.4);
+    m.position.set(h.x + (1 - ef) * (i % 2 ? 0.5 : -0.5), h.y + (1 - ef) * 0.35, h.z + (1 - ef) * 6.5);
+    m.rotation.set((1 - ef) * 0.5 + Math.sin(t * 1.7 + i) * 0.02, (1 - ef) * (i % 2 ? -0.7 : 0.7) + Math.sin(t * 1.3 + i * 0.9) * 0.04, (1 - ef) * (i % 2 ? 0.25 : -0.25));
+    m.scale.set(1 + sq * 0.3, 1 + sq * 0.3, 1 - sq * 1.6);
   });
   env.paper(x);
   // colour slab behind the bottom row (wipes up on the first beat after the drop)
