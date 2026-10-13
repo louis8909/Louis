@@ -78,7 +78,9 @@ export async function draw(x, t, env) {
       const appear = k < 3 ? 1 : Ez.outBack(prog(t, SLAB_T(k), SLAB_T(k) + 0.3), 2.0);
       m.visible = appear > 0.001;
       m.scale.setScalar(Math.max(0.001, appear));
-      m.position.y = m.userData.y + (1 - appear) * 0.6;
+      // slabs slide in from the right at their own height (never cross the counter above)
+      m.position.y = m.userData.y + (1 - appear) * 0.22;
+      m.position.x = (1 - appear) * 0.9;
       m.rotation.y = (1 - appear) * 0.8 + (k % 2 ? 1 : -1) * 0.04 * Math.sin(t * 1.2 + k);
     });
     S.tower.position.z = -cardIn * 4;
