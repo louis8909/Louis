@@ -90,6 +90,7 @@ export function clay(color, o = {}) {
     transparent: !!o.transparent,
     opacity: o.opacity ?? 1,
     clippingPlanes: o.clip || null,
+    clipShadows: !!o.clip,
   });
 }
 export function matte(color, o = {}) {

@@ -28,7 +28,7 @@ export function build(logoData) {
   wall.position.z = -0.12;
   sc.add(wall);
   S.sweep = new THREE.PointLight(0xffffff, 0, 6, 1.6);
-  S.sweep.position.set(-3, 0.4, 1.3);
+  S.sweep.position.set(-3, -0.15, 2.4);
   sc.add(S.sweep);
   S.L = L; S.sc = sc; S.cam = camera(30); S.wordMat = wordMat;
 }
@@ -81,7 +81,7 @@ export async function draw(x, t, env) {
   // light sweep across the glossy logo on the final hit (18.0 s)
   const sp = prog(t, b(50) - 0.05, b(50) + 0.75);
   S.sweep.position.x = lerp(-2.6, 2.8, Ez.ioQ(sp));
-  S.sweep.intensity = sp > 0 && sp < 1 ? Math.sin(sp * Math.PI) * 9 : 0;
+  S.sweep.intensity = sp > 0 && sp < 1 ? Math.sin(sp * Math.PI) * 4.5 : 0;
   env.paper(x);
   x.drawImage(render(S.sc, S.cam), 0, 0, W, H);
   // tagline
